@@ -15,7 +15,7 @@ public class Principal {
   
     public static void main(String[] args) {
         String databaseName = "campusfp";
-        String serverName = "localhost";
+        String serverName = "localhost";//127.0.0.1
         int puerto = 27017;
 
         // Crear la conexión al servidor de MongoDB
@@ -40,8 +40,10 @@ public class Principal {
                 System.out.println(doc.toJson());
             }
         }
+        
         // 3. INSERTAR UN DOCUMENTO
         Document documento = new Document();
+        
         documento.append("_id", "A6");
         documento.append("nombre", "Carlos");
         documento.append("edad", 23);
@@ -50,7 +52,15 @@ public class Principal {
 
         alumno.insertOne(documento);
         System.out.println("Documento insertado correctamente.");
-        
+        /*
+        // 2. MOSTRAR TODOS LOS DOCUMENTOS DE LA COLECCION
+        try (MongoCursor<Document> cursor = alumno.find().iterator()) {
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                System.out.println(doc.toJson());
+            }
+        }
+        */
         // 4. MOSTRAR DOCUMENTO POR CAMPOS
         Document resultado = alumno.find(Filters.eq("_id", "A6")).first();
         if (resultado != null) {
@@ -62,8 +72,6 @@ public class Principal {
             System.out.println("Jobis: " + resultado.get("jobis"));
         }
 
-
-
         // 5. ACTUALIZAR UN DOCUMENTO
         alumno.updateOne(
                 Filters.eq("_id", "A6"),
@@ -71,8 +79,13 @@ public class Principal {
         );
         System.out.println("Documento actualizado correctamente.");
 
+
         // 6. ELIMINAR UN DOCUMENTO
         alumno.deleteOne(Filters.eq("_id", "A6"));
         System.out.println("Documento eliminado correctamente.");
+        
+        alumno.deleteMany(Filters.eq("nombre", "Luis"));
+        System.out.println("Documento eliminado correctamente.");
+        
         }
     }
